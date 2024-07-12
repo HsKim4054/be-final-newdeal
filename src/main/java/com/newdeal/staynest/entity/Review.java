@@ -1,5 +1,6 @@
 package com.newdeal.staynest.entity;
 
+import com.newdeal.staynest.entity.accommodation.Accommodation;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,11 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
@@ -33,4 +35,8 @@ public class Review {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImg> images;
+
+    @ManyToOne
+    @JoinColumn(name = "accomm_id", nullable = false)
+    private Accommodation accommodation;
 }

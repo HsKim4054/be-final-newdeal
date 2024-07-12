@@ -1,6 +1,8 @@
 package com.newdeal.staynest.entity.accommodation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.newdeal.staynest.entity.Host;
+import com.newdeal.staynest.entity.Review;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,22 +14,23 @@ import java.util.List;
 @Table(name = "accommodation")
 @Getter
 @Setter
-@Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accommId;
+    private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "host_id")
     private Host host;
 
     @Column(name = "accomm_name", nullable = false)
     private String name;
 
-    @Column(name = "accomm_category", nullable = false)
+    @Column(name = "accomm_category", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'default_category'")
     private String category;
 
     @Column(name = "room_category", nullable = false)
@@ -54,12 +57,21 @@ public class Accommodation {
     @Column(name = "accomm_content", nullable = false)
     private String content;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccommodationImg> images;
 
     private LocalDateTime createdAt;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    private int avg;
 
     private double latitude;
     private double longitude;
+
+
+
 }
