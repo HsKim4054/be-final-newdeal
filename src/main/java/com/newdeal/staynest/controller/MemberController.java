@@ -81,9 +81,6 @@ public class MemberController {
     @PostMapping("/duplicateEmail")
     public @ResponseBody String duplicateEmail(@RequestParam("email") String email,
                                                @RequestParam("identify") String identify) {
-        System.out.println("------------------");
-        System.out.println("identify : " + identify);
-        System.out.println("------------------");
         return (identify.equals("guest")) ?
                 memberService.checkDuplicateGuestEmail(email) : memberService.checkDuplicateHostEmail(email);
     }
@@ -92,6 +89,9 @@ public class MemberController {
     public @ResponseBody String emailCheck(@RequestParam String email) {
         String emailCheckCode;
         emailCheckCode = memberService.sendEmailCheck(email);
+        System.out.println("---------------------------");
+        System.out.println("이메일 인증 코드: " + emailCheckCode);
+        System.out.println("---------------------------");
         return emailCheckCode;
     }
 
@@ -129,4 +129,9 @@ public class MemberController {
         return mv;
     }
 
+    // OAuth2 회원가입 페이지
+    @GetMapping("/oAuth2Register")
+    public ModelAndView oAuth2Register() {
+        return new ModelAndView("member/oAuth2Register");
+    }
 }
